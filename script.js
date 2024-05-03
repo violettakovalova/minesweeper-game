@@ -5,6 +5,7 @@ const CHEAT_REVEAL_ALL = true;
 
 const ROWS_COUNT = 10;
 const COLS_COUNT = 10;
+const BOMBS_COUNT = 10;
 
 var defeat = false;
 var victory = false;
@@ -39,14 +40,14 @@ cells[9][9].isBomb = true; */
 //                Add a BOMBS_COUNT constant so that you can easily change the amount of bombs placed. Put it next to the
 //                other constants.
 //
-function randomNumber(params) {
-  return Math.round(Math.random() * 9);
+
+function randomNumber(param) {
+  return Math.floor(Math.random() * param);
 }
 
-for (let i = 0; i < 10; i++) {
-  cells[randomNumber()][randomNumber()].isBomb = true;
+for (let i = 0; i < BOMBS_COUNT; i++) {
+  cells[randomNumber(ROWS_COUNT)][randomNumber(COLS_COUNT)].isBomb = true;
 }
-
 
 
 // Once the game has been initialized, we "render" it.
@@ -61,7 +62,7 @@ function discoverCell(row, col) {
   //
   // TODO: Task 5 - Reveal cells when clicked.
   //
-
+  cells[row][col].discovered = true;
   //
   // TODO: Task 6 - Discover neighbor cells recursively, as long as there are no adjacent bombs to the current cell.
   //
@@ -85,8 +86,36 @@ function countAdjacentBombs(row, col) {
   // TODO: Task 4 - Adjacent bombs are bombs in cells touching our cell (also diagonally). Implement this function
   //                so that it returns the count of adjacent cells with bombs in them. 
   //
-  return 1;
+
+  let count = 0;
+
+  if (row > 0 && cells[row - 1][col].isBomb) {
+    count += 1;
+  }
+  if (row < ROWS_COUNT - 1 && cells[row + 1][col].isBomb) {
+    count += 1;
+  }
+  if (col > 0 && cells[row][col - 1].isBomb) {
+    count += 1;
+  }
+  if (col < COLS_COUNT - 1 && cells[row][col + 1].isBomb) {
+    count += 1;
+  }
+  if (row > 0 && col < COLS_COUNT - 1 && cells[row - 1][col + 1].isBomb) {
+    count += 1;
+  }
+  if (row < ROWS_COUNT - 1 && col < COLS_COUNT - 1 && cells[row + 1][col + 1].isBomb) {
+    count += 1;
+  }
+  if (row > 0 && col > 0 && cells[row - 1][col - 1].isBomb) {
+    count += 1;
+  }
+  if (row < ROWS_COUNT - 1 && col > 0 && cells[row + 1][col - 1].isBomb) {
+    count += 1;
+  }
+  return count;
 }
+
 
 function getBombsCount() {
   //
